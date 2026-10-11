@@ -1,0 +1,14 @@
+{
+  "name": "todo-project-noa-new",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write \"**/*.{ts,js,json,md}\""
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.5.0",
+    "prettier": "^3.9.9"
+  }
+}
