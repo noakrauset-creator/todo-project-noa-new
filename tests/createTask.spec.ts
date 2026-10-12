@@ -1,4 +1,4 @@
-import { test, expect } from '../Fixtures/fixtureEmptyPage';
+import { test, expect } from '../Fixtures/fixtures';
 import { faker } from '@faker-js/faker';
 import { categoryField, priorityField, description, title } from '../Helpers/constans';
 

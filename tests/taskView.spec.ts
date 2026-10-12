@@ -1,4 +1,4 @@
-import { test, expect } from '../Fixtures/fixtureFewTasks';
+import { test, expect } from '../Fixtures/fixtures';
 
 test.describe('Task View Filters Tests', () => {
 
