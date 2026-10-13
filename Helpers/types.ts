@@ -1,2 +1,2 @@
-export type category = 'personal' | 'work' | 'study' | 'chores' | 'others';
-export type priority = 'low' | 'medium' | 'high';
+export type Category = 'personal' | 'work' | 'study' | 'chores' | 'others';
+export type Priority = 'low' | 'medium' | 'high';
