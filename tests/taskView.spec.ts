@@ -2,7 +2,7 @@ import { test, expect } from '../Fixtures/fixtures';
 
 test.describe('Task View Filters Tests', () => {
 
-    test('Should display completed tasks and verify href attribute equals completed=true', async ({ pageWithCompletedTasks, taskViewPage }) => {
+    test('Should display completed tasks and verify href attribute equals completed=true', async ({ pageWithCompletedTasks, taskViewPage, completedTasksAPI }) => {
         const { completedTaskTitles } = pageWithCompletedTasks;
 
         await taskViewPage.clickcompletedTasksButton();
@@ -14,7 +14,7 @@ test.describe('Task View Filters Tests', () => {
         }
     });
 
-    test('Should display incompleted tasks and verify href attribute equals completed=false', async ({ pageWithIncompletedTasks, taskViewPage }) => {
+    test('Should display incompleted tasks and verify href attribute equals completed=false', async ({ pageWithIncompletedTasks, taskViewPage, inCompletedTasksAPI }) => {
         const { incompletedTaskTitles } = pageWithIncompletedTasks;
 
         await taskViewPage.clickIncompletedTasksButton();
@@ -26,7 +26,7 @@ test.describe('Task View Filters Tests', () => {
         }
     });
 
-    test('Should display all tasks when All tab is clicked', async ({ pageWithIncompletedTasks, taskViewPage }) => {
+    test('Should display all tasks when All tab is clicked', async ({ pageWithIncompletedTasks, taskViewPage, inCompletedTasksAPI }) => {
         const { incompletedTaskTitles } = pageWithIncompletedTasks;
 
         await taskViewPage.clickAllTheTasksButton();
