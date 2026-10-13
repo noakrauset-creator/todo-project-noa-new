@@ -1,24 +1,31 @@
 import { Page, Locator } from '@playwright/test';
-import { completeTaskButtons, removeTaskButtons,tasksLocator } from '../Helpers/constans';
 
 export class ActionsOnTask {
 
     readonly page: Page;
+    readonly tasksLocator: Locator;
+    readonly completeTaskButtons: Locator;
+    readonly removeTaskButtons: Locator;
+
+
 
     constructor(page: Page) {
         this.page = page;
+        this.tasksLocator = page.locator('.task');
+        this.completeTaskButtons = page.locator('div.checkbox a');
+        this.removeTaskButtons = page.locator('div.delete, button.delete-btn');
     }
 
     getTaskItem(taskTitle: string): Locator {
-        return this.page.locator(tasksLocator, { hasText: taskTitle});
+        return this.tasksLocator.filter({ hasText: taskTitle });
     }
 
     getTaskCheckboxLink(taskTitle: string): Locator {
-        return this.getTaskItem(taskTitle).locator(completeTaskButtons);
+        return this.getTaskItem(taskTitle).locator(this.completeTaskButtons);
     }
 
     getTaskDeleteButton(taskTitle: string): Locator {
-        return this.getTaskItem(taskTitle).locator(removeTaskButtons);
+        return this.getTaskItem(taskTitle).locator(this.removeTaskButtons);
     }
 
     async deleteTask(taskTitle: string) {
