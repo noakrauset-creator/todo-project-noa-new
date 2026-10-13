@@ -1,5 +1,4 @@
 import { Page, Locator } from '@playwright/test';
-import { completeTaskButtons,tasksLocator } from '../Helpers/constans';
 
 export class ToDoControls {
     readonly page: Page;
@@ -18,9 +17,6 @@ export class ToDoControls {
     }
     async clickClearAllTheCompletedTasks() {
         await this.clearAllTheTasksButton.click();
-    }
-    getTaskCheckboxLink(taskTitle: string): Locator {
-        return this.page.locator(tasksLocator, { hasText: taskTitle }).locator(completeTaskButtons);
     }
     async getTasksLeftCount(): Promise<number> {
         await this.tasksLeftCounter.waitFor({ state: 'visible' });

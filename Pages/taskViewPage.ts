@@ -1,5 +1,4 @@
 import { Page, Locator } from '@playwright/test';
-import { completeTaskButtons,tasksLocator } from '../Helpers/constans';
 
 export class TaskView {
 
@@ -7,7 +6,6 @@ export class TaskView {
     readonly allTheTasksButton: Locator;
     readonly inCompletedTasksButton: Locator;
     readonly completedTasksButton: Locator;
-
 
     constructor(page: Page) {
         this.page = page;
@@ -24,8 +22,4 @@ export class TaskView {
     async clickcompletedTasksButton() {
         await this.completedTasksButton.click();
     }
-    getTaskCheckboxLink(taskTitle: string): Locator {
-        return this.page.locator(tasksLocator, { hasText: taskTitle }).locator(completeTaskButtons);
-    }
-
 }
