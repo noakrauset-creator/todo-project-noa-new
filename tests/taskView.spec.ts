@@ -1,7 +1,6 @@
 import { test, expect } from '../Fixtures/fixtures';
 
 test.describe('Task View Filters Tests', () => {
-
     test('Should display completed tasks and verify href attribute equals completed=true', async ({ pageWithCompletedTasks, taskViewPage, completedTasksAPI, todoPage }) => {
         const { completedTaskTitles } = pageWithCompletedTasks;
 
@@ -37,4 +36,3 @@ test.describe('Task View Filters Tests', () => {
         }
     });
 });
-

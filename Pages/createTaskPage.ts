@@ -2,7 +2,6 @@ import { Page, Locator } from '@playwright/test';
 import { Priority, Category } from '../Helpers/types';
 
 export class CreateTask {
-
     readonly page: Page;
     readonly titleField: Locator;
     readonly descriptionField: Locator;
@@ -10,8 +9,6 @@ export class CreateTask {
     readonly categoryField: Locator;
     readonly dueDateField: Locator;
     readonly submitButton: Locator;
-
-
 
     constructor(page: Page) {
         this.page = page;
@@ -21,7 +18,6 @@ export class CreateTask {
         this.categoryField = page.locator('#category');
         this.dueDateField = page.locator('#date');
         this.submitButton = page.locator('#save');
-
     }
     async fillTitle(title: string) {
         await this.titleField.fill(title);
@@ -41,5 +37,4 @@ export class CreateTask {
     async submitClick() {
         await this.submitButton.click();
     }
-
 }

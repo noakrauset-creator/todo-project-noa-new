@@ -3,6 +3,7 @@ import { ToDoControls } from '../Pages/todoControlsPage';
 import { CreateTask } from '../Pages/createTaskPage.ts';
 import { ActionsOnTask } from '../Pages/actionsOnTaskPage';
 import { test as base, expect, Page } from '@playwright/test';
+import { faker } from '@faker-js/faker';
 
 type MyFixtures = {
     emptyTodoPage: void;
@@ -20,7 +21,6 @@ type MyFixtures = {
 };
 
 export const test = base.extend<MyFixtures>({
-
     emptyTodoPage: async ({ page, request, myPageFixture }, use) => {
         const response = await request.get('http://localhost:8000/api/tasks');
         expect(response.ok()).toBeTruthy();
@@ -34,12 +34,12 @@ export const test = base.extend<MyFixtures>({
         const { taskTitle } = taskFixture;
         const response = await request.post('http://localhost:8000/api/tasks', {
             data: {
-                "task": taskTitle,
-                "description": "Complete the Q1 financial report and submit to finance team",
-                "priority": "high",
-                "category": "work",
-                "date": "2026-03-31",
-                "completed": false
+                task: taskTitle,
+                description: `Complete the Q1 financial report and submit to finance team ${Date.now()}`,
+                priority: 'high',
+                category: 'work',
+                date: faker.date.future().toISOString().split('T')[0],
+                completed: false,
             },
         });
 
@@ -51,36 +51,40 @@ export const test = base.extend<MyFixtures>({
         await use();
     },
     completedTasksAPI: async ({ page, request, emptyTodoPage, pageWithCompletedTasks, myPageFixture }, use) => {
-        const { completedTaskTitles } = pageWithCompletedTasks
-        await Promise.all(completedTaskTitles.map(task =>
-            request.post('http://localhost:8000/api/tasks', {
-                data: {
-                    task,
-                    completed: true,
-                    priority: 'medium',
-                    category: 'work',
-                    date: '2026-03-31'
-                }
-            })
-        ));
+        const { completedTaskTitles } = pageWithCompletedTasks;
+        await Promise.all(
+            completedTaskTitles.map((task) =>
+                request.post('http://localhost:8000/api/tasks', {
+                    data: {
+                        task,
+                        completed: true,
+                        priority: 'medium',
+                        category: 'work',
+                        date: faker.date.future().toISOString().split('T')[0],
+                    },
+                })
+            )
+        );
 
         await use();
     },
 
     inCompletedTasksAPI: async ({ page, request, emptyTodoPage, pageWithIncompletedTasks, myPageFixture }, use) => {
-        const { incompletedTaskTitles } = pageWithIncompletedTasks
+        const { incompletedTaskTitles } = pageWithIncompletedTasks;
 
-        await Promise.all(incompletedTaskTitles.map(task =>
-            request.post('http://localhost:8000/api/tasks', {
-                data: {
-                    task,
-                    completed: false,
-                    priority: 'high',
-                    category: 'work',
-                    date: '2026-03-31'
-                }
-            })
-        ));
+        await Promise.all(
+            incompletedTaskTitles.map((task) =>
+                request.post('http://localhost:8000/api/tasks', {
+                    data: {
+                        task,
+                        completed: false,
+                        priority: 'high',
+                        category: 'work',
+                        date: faker.date.future().toISOString().split('T')[0],
+                    },
+                })
+            )
+        );
 
         await use();
     },

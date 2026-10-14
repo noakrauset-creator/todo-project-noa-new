@@ -1,13 +1,10 @@
 import { Page, Locator } from '@playwright/test';
 
 export class ActionsOnTask {
-
     readonly page: Page;
     readonly tasksLocator: Locator;
     readonly completeTaskButtons: Locator;
     readonly removeTaskButtons: Locator;
-
-
 
     constructor(page: Page) {
         this.page = page;

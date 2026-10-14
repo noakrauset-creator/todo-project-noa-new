@@ -1,7 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 
 export class TaskView {
-
     readonly page: Page;
     readonly allTheTasksButton: Locator;
     readonly inCompletedTasksButton: Locator;

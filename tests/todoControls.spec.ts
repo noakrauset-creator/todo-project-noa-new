@@ -1,7 +1,6 @@
 import { test, expect } from '../Fixtures/fixtures';
 
 test.describe('ToDo Bottom Controls Tests', () => {
-
     test('Should mark all tasks as completed when clicking Complete All Tasks', async ({ pageWithIncompletedTasks, todoControlsPage, inCompletedTasksAPI, todoPage }) => {
         const { incompletedTaskTitles } = pageWithIncompletedTasks;
 
@@ -29,5 +28,4 @@ test.describe('ToDo Bottom Controls Tests', () => {
         const countFromUI = await todoControlsPage.getTasksLeftCount();
         expect(countFromUI).toBe(incompletedTaskTitles.length);
     });
-
 });
