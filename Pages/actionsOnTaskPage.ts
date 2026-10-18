@@ -18,9 +18,6 @@ export class ActionsOnTaskPage {
     getTaskItem(taskTitle: string): Locator {
         return this.tasksLocator.filter({ hasText: taskTitle });
     }
-    getTaskCheckboxLink(taskTitle: string): Locator {
-        return this.getTaskItem(taskTitle).locator(this.completeTaskButtons);
-    }
     async deleteTask(taskTitle: string) {
         await this.getTaskItem(taskTitle).locator(this.removeTaskButtons).click();
     }

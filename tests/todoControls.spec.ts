@@ -1,7 +1,7 @@
 import { test, expect } from '../Fixtures/fixtures';
 
 test.describe('ToDo Bottom Controls Tests', () => {
-    test('Should mark all tasks as completed when clicking Complete All Tasks', async ({ pageWithIncompletedTasks, todoControlsPage, inCompletedTasksAPI, todoPage }) => {
+    test('Should mark all tasks as completed when clicking Complete All Tasks', async ({ pageWithIncompletedTasks, todoControlsPage, inCompletedTasksAPI, todoPage, goto }) => {
         const { incompletedTaskTitles } = pageWithIncompletedTasks;
 
         await todoControlsPage.clickCompleteAllTheTasks();
@@ -11,7 +11,7 @@ test.describe('ToDo Bottom Controls Tests', () => {
         }
     });
 
-    test('Should clear all completed tasks from the UI when clicking Clear Completed', async ({ pageWithCompletedTasks, todoControlsPage, completedTasksAPI, todoPage }) => {
+    test('Should clear all completed tasks from the UI when clicking Clear Completed', async ({ pageWithCompletedTasks, todoControlsPage, completedTasksAPI, todoPage, goto }) => {
         const { completedTaskTitles } = pageWithCompletedTasks;
 
         await todoControlsPage.clickClearAllTheCompletedTasks();
@@ -20,7 +20,7 @@ test.describe('ToDo Bottom Controls Tests', () => {
         }
     });
 
-    test('Should display correct tasks left count matching incompleted tasks count', async ({ inCompletedTasksAPI, todoControlsPage, taskViewPage, pageWithIncompletedTasks }) => {
+    test('Should display correct tasks left count matching incompleted tasks count', async ({ inCompletedTasksAPI, todoControlsPage, taskViewPage, pageWithIncompletedTasks, goto }) => {
         const { incompletedTaskTitles } = pageWithIncompletedTasks;
         await taskViewPage.clickIncompletedTasksButton();
         const countFromUI = await todoControlsPage.getTasksLeftCount();

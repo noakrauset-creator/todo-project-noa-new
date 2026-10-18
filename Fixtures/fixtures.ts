@@ -10,18 +10,18 @@ type MyFixtures = {
     pageWithOneTask: void;
     completedTasksAPI: void;
     inCompletedTasksAPI: void;
-    pageWithCompletedTasks: { page: Page; completedTaskTitles: string[] };
-    pageWithIncompletedTasks: { page: Page; incompletedTaskTitles: string[] };
-    myPageFixture: Page;
+    pageWithCompletedTasks: { completedTaskTitles: string[] };
+    pageWithIncompletedTasks: {  incompletedTaskTitles: string[] };
+    goto: void;
     todoPage: ActionsOnTaskPage;
     todoControlsPage: ToDoControlsPage;
     taskViewPage: TaskViewPage;
     createTaskPage: CreateTaskPage;
-    taskFixture: { page: Page; taskTitle: string };
+    taskFixture: { taskTitle: string };
 };
 
 export const test = base.extend<MyFixtures>({
-    emptyTodoPage: async ({ page, request, myPageFixture }, use) => {
+    emptyTodoPage: async ({ page, request }, use) => {
         const response = await request.get('/api/tasks');
         expect(response.ok()).toBeTruthy();
         const tasks = await response.json();
@@ -30,7 +30,7 @@ export const test = base.extend<MyFixtures>({
         }
         await use();
     },
-    pageWithOneTask: async ({ page, request, emptyTodoPage, taskFixture, myPageFixture }, use) => {
+    pageWithOneTask: async ({ page, request, emptyTodoPage, taskFixture }, use) => {
         const { taskTitle } = taskFixture;
         const response = await request.post('/api/tasks', {
             data: {
@@ -47,10 +47,9 @@ export const test = base.extend<MyFixtures>({
             throw new Error(`Failed to create task via API: ${response.status()}`);
         }
 
-        page.reload();
         await use();
     },
-    completedTasksAPI: async ({ page, request, emptyTodoPage, pageWithCompletedTasks, myPageFixture }, use) => {
+    completedTasksAPI: async ({ page, request, emptyTodoPage, pageWithCompletedTasks }, use) => {
         const { completedTaskTitles } = pageWithCompletedTasks;
         await Promise.all(
             completedTaskTitles.map((task) =>
@@ -69,7 +68,7 @@ export const test = base.extend<MyFixtures>({
         await use();
     },
 
-    inCompletedTasksAPI: async ({ page, request, emptyTodoPage, pageWithIncompletedTasks, myPageFixture }, use) => {
+    inCompletedTasksAPI: async ({ page, request, emptyTodoPage, pageWithIncompletedTasks }, use) => {
         const { incompletedTaskTitles } = pageWithIncompletedTasks;
 
         await Promise.all(
@@ -90,19 +89,19 @@ export const test = base.extend<MyFixtures>({
     },
     taskFixture: async ({ page }, use) => {
         const dynamicTitle = `Prepare quarterly report ${Date.now()}`;
-        await use({ page, taskTitle: dynamicTitle });
+        await use({  taskTitle: dynamicTitle });
     },
     pageWithCompletedTasks: async ({ page }, use) => {
         const titles = [`Done 1 ${Date.now()}`, `Done 2 ${Date.now()}`, `Done 3 ${Date.now()}`];
-        await use({ page, completedTaskTitles: titles });
+        await use({ completedTaskTitles: titles });
     },
     pageWithIncompletedTasks: async ({ page }, use) => {
         const titles = [`Done 1 ${Date.now()}`, `Done 2 ${Date.now()}`, `Done 3 ${Date.now()}`];
-        await use({ page, incompletedTaskTitles: titles });
+        await use({ incompletedTaskTitles: titles });
     },
-    myPageFixture: async ({ page }, use) => {
+    goto: async ({ page }, use) => {
         await page.goto('/');
-        await use(page);
+        await use();
     },
     todoControlsPage: async ({ page }, use) => {
         await use(new ToDoControlsPage(page));
