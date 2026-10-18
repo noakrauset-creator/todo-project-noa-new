@@ -1,7 +1,7 @@
-import { TaskView } from '../Pages/taskViewPage';
-import { ToDoControls } from '../Pages/todoControlsPage';
-import { CreateTask } from '../Pages/createTaskPage.ts';
-import { ActionsOnTask } from '../Pages/actionsOnTaskPage';
+import { TaskViewPage } from '../Pages/taskViewPage';
+import { ToDoControlsPage } from '../Pages/todoControlsPage';
+import { CreateTaskPage } from '../Pages/createTaskPage.ts';
+import { ActionsOnTaskPage } from '../Pages/actionsOnTaskPage';
 import { test as base, expect, Page } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
@@ -13,26 +13,26 @@ type MyFixtures = {
     pageWithCompletedTasks: { page: Page; completedTaskTitles: string[] };
     pageWithIncompletedTasks: { page: Page; incompletedTaskTitles: string[] };
     myPageFixture: Page;
-    todoPage: ActionsOnTask;
-    todoControlsPage: ToDoControls;
-    taskViewPage: TaskView;
-    createTaskPage: CreateTask;
+    todoPage: ActionsOnTaskPage;
+    todoControlsPage: ToDoControlsPage;
+    taskViewPage: TaskViewPage;
+    createTaskPage: CreateTaskPage;
     taskFixture: { page: Page; taskTitle: string };
 };
 
 export const test = base.extend<MyFixtures>({
     emptyTodoPage: async ({ page, request, myPageFixture }, use) => {
-        const response = await request.get('http://localhost:8000/api/tasks');
+        const response = await request.get('/api/tasks');
         expect(response.ok()).toBeTruthy();
         const tasks = await response.json();
         for (const task of tasks) {
-            await request.delete(`http://localhost:8000/api/tasks/${task.id}`);
+            await request.delete(`/api/tasks/${task.id}`);
         }
         await use();
     },
     pageWithOneTask: async ({ page, request, emptyTodoPage, taskFixture, myPageFixture }, use) => {
         const { taskTitle } = taskFixture;
-        const response = await request.post('http://localhost:8000/api/tasks', {
+        const response = await request.post('/api/tasks', {
             data: {
                 task: taskTitle,
                 description: `Complete the Q1 financial report and submit to finance team ${Date.now()}`,
@@ -54,7 +54,7 @@ export const test = base.extend<MyFixtures>({
         const { completedTaskTitles } = pageWithCompletedTasks;
         await Promise.all(
             completedTaskTitles.map((task) =>
-                request.post('http://localhost:8000/api/tasks', {
+                request.post('/api/tasks', {
                     data: {
                         task,
                         completed: true,
@@ -74,7 +74,7 @@ export const test = base.extend<MyFixtures>({
 
         await Promise.all(
             incompletedTaskTitles.map((task) =>
-                request.post('http://localhost:8000/api/tasks', {
+                request.post('/api/tasks', {
                     data: {
                         task,
                         completed: false,
@@ -105,16 +105,16 @@ export const test = base.extend<MyFixtures>({
         await use(page);
     },
     todoControlsPage: async ({ page }, use) => {
-        await use(new ToDoControls(page));
+        await use(new ToDoControlsPage(page));
     },
     taskViewPage: async ({ page }, use) => {
-        await use(new TaskView(page));
+        await use(new TaskViewPage(page));
     },
     createTaskPage: async ({ page }, use) => {
-        await use(new CreateTask(page));
+        await use(new CreateTaskPage(page));
     },
     todoPage: async ({ page }, use) => {
-        await use(new ActionsOnTask(page));
+        await use(new ActionsOnTaskPage(page));
     },
 });
 export { expect } from '@playwright/test';

@@ -1,7 +1,7 @@
 import { Page, Locator } from '@playwright/test';
 import { Priority, Category } from '../Helpers/types';
 
-export class CreateTask {
+export class CreateTaskPage {
     readonly page: Page;
     readonly titleField: Locator;
     readonly descriptionField: Locator;

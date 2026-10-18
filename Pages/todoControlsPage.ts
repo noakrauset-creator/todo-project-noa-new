@@ -1,6 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 
-export class ToDoControls {
+export class ToDoControlsPage {
     readonly page: Page;
     readonly completeAllTheTasksButton: Locator;
     readonly clearAllTheTasksButton: Locator;

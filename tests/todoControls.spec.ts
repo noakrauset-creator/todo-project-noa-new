@@ -6,9 +6,8 @@ test.describe('ToDo Bottom Controls Tests', () => {
 
         await todoControlsPage.clickCompleteAllTheTasks();
         for (const title of incompletedTaskTitles) {
-            const checkboxLink = todoPage.getTaskCheckboxLink(title);
-            await expect(checkboxLink).toBeVisible();
-            await expect(checkboxLink).toHaveAttribute('href', /completed=true/);
+            await todoPage.expectTaskToBeVisible(title);
+            await todoPage.expectTaskToBeCompleted(title);
         }
     });
 
@@ -17,8 +16,7 @@ test.describe('ToDo Bottom Controls Tests', () => {
 
         await todoControlsPage.clickClearAllTheCompletedTasks();
         for (const title of completedTaskTitles) {
-            const checkboxLink = todoPage.getTaskCheckboxLink(title);
-            await expect(checkboxLink).toBeHidden();
+            await todoPage.expectTaskToBeHidden(title);
         }
     });
 
