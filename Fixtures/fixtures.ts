@@ -3,14 +3,14 @@ import { ToDoControlsPage } from '../Pages/todoControlsPage';
 import { CreateTaskPage } from '../Pages/createTaskPage.ts';
 import { ActionsOnTaskPage } from '../Pages/actionsOnTaskPage';
 import { test as base, expect, Page } from '@playwright/test';
+import { createRandomFutureDate, createRandomCategory, createRandomPriority, createRandomSentence } from '../Helpers/utils';
 import { faker } from '@faker-js/faker';
 
 type MyFixtures = {
     emptyTodoPage: void;
-    createSingleTask: void;
+    createSingleTask: { taskTitle: string };
     createCompletedTasks: { completedTaskTitles: string[] };
     createInCompletedTasks: { inCompletedTaskTitles: string[] };
-    taskFixture: { taskTitle: string };
     goto: void;
     todoPage: ActionsOnTaskPage;
     todoControlsPage: ToDoControlsPage;
@@ -28,24 +28,21 @@ export const test = base.extend<MyFixtures>({
         }
         await use();
     },
-    createSingleTask: async ({ page, request, emptyTodoPage, taskFixture }, use) => {
-        const { taskTitle } = taskFixture;
+    createSingleTask: async ({ page, request, emptyTodoPage }, use) => {
+        const dynamicTitle = createRandomSentence();
         const response = await request.post('/api/tasks', {
             data: {
-                task: taskTitle,
-                description: `Complete the Q1 financial report and submit to finance team ${Date.now()}`,
-                priority: 'high',
-                category: 'work',
-                date: faker.date.future().toISOString().split('T')[0],
+                task: dynamicTitle,
+                description: createRandomSentence(),
+                priority: createRandomPriority(),
+                category: createRandomCategory(),
+                date: createRandomFutureDate(),
                 completed: false,
             },
         });
+        expect(response.ok()).toBeTruthy();
 
-        if (!response.ok()) {
-            throw new Error(`Failed to create task via API: ${response.status()}`);
-        }
-
-        await use();
+        await use({ taskTitle: dynamicTitle });
     },
     createCompletedTasks: async ({ page, request, emptyTodoPage }, use) => {
         const titles = [`Done 1 ${Date.now()}`, `Done 2 ${Date.now()}`, `Done 3 ${Date.now()}`];
@@ -55,9 +52,9 @@ export const test = base.extend<MyFixtures>({
                     data: {
                         task,
                         completed: true,
-                        priority: 'medium',
-                        category: 'work',
-                        date: faker.date.future().toISOString().split('T')[0],
+                        priority: createRandomPriority(),
+                        category: createRandomCategory(),
+                        date: createRandomFutureDate(),
                     },
                 })
             )
@@ -66,26 +63,22 @@ export const test = base.extend<MyFixtures>({
     },
 
     createInCompletedTasks: async ({ page, request, emptyTodoPage }, use) => {
-        const titles = [`Done 1 ${Date.now()}`, `Done 2 ${Date.now()}`, `Done 3 ${Date.now()}`];
+        const titles = [`ToDo 1 ${Date.now()}`, `ToDo 2 ${Date.now()}`, `ToDo 3 ${Date.now()}`];
         await Promise.all(
             titles.map((task) =>
                 request.post('/api/tasks', {
                     data: {
                         task,
                         completed: false,
-                        priority: 'high',
-                        category: 'work',
-                        date: faker.date.future().toISOString().split('T')[0],
+                        priority: createRandomPriority(),
+                        category: createRandomCategory(),
+                        date: createRandomFutureDate(),
                     },
                 })
             )
         );
 
         await use({ inCompletedTaskTitles: titles });
-    },
-    taskFixture: async ({ page }, use) => {
-        const dynamicTitle = `Prepare quarterly report ${Date.now()}`;
-        await use({ taskTitle: dynamicTitle });
     },
     goto: async ({ page }, use) => {
         await page.goto('/');
