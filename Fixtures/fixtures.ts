@@ -7,17 +7,15 @@ import { faker } from '@faker-js/faker';
 
 type MyFixtures = {
     emptyTodoPage: void;
-    pageWithOneTask: void;
-    completedTasksAPI: void;
-    inCompletedTasksAPI: void;
-    pageWithCompletedTasks: { completedTaskTitles: string[] };
-    pageWithIncompletedTasks: {  incompletedTaskTitles: string[] };
+    createSingleTask: void;
+    createCompletedTasks: { completedTaskTitles: string[] };
+    createInCompletedTasks: { inCompletedTaskTitles: string[] };
+    taskFixture: { taskTitle: string };
     goto: void;
     todoPage: ActionsOnTaskPage;
     todoControlsPage: ToDoControlsPage;
     taskViewPage: TaskViewPage;
     createTaskPage: CreateTaskPage;
-    taskFixture: { taskTitle: string };
 };
 
 export const test = base.extend<MyFixtures>({
@@ -30,7 +28,7 @@ export const test = base.extend<MyFixtures>({
         }
         await use();
     },
-    pageWithOneTask: async ({ page, request, emptyTodoPage, taskFixture }, use) => {
+    createSingleTask: async ({ page, request, emptyTodoPage, taskFixture }, use) => {
         const { taskTitle } = taskFixture;
         const response = await request.post('/api/tasks', {
             data: {
@@ -49,10 +47,10 @@ export const test = base.extend<MyFixtures>({
 
         await use();
     },
-    completedTasksAPI: async ({ page, request, emptyTodoPage, pageWithCompletedTasks }, use) => {
-        const { completedTaskTitles } = pageWithCompletedTasks;
+    createCompletedTasks: async ({ page, request, emptyTodoPage }, use) => {
+        const titles = [`Done 1 ${Date.now()}`, `Done 2 ${Date.now()}`, `Done 3 ${Date.now()}`];
         await Promise.all(
-            completedTaskTitles.map((task) =>
+            titles.map((task) =>
                 request.post('/api/tasks', {
                     data: {
                         task,
@@ -64,15 +62,13 @@ export const test = base.extend<MyFixtures>({
                 })
             )
         );
-
-        await use();
+        await use({ completedTaskTitles: titles });
     },
 
-    inCompletedTasksAPI: async ({ page, request, emptyTodoPage, pageWithIncompletedTasks }, use) => {
-        const { incompletedTaskTitles } = pageWithIncompletedTasks;
-
+    createInCompletedTasks: async ({ page, request, emptyTodoPage }, use) => {
+        const titles = [`Done 1 ${Date.now()}`, `Done 2 ${Date.now()}`, `Done 3 ${Date.now()}`];
         await Promise.all(
-            incompletedTaskTitles.map((task) =>
+            titles.map((task) =>
                 request.post('/api/tasks', {
                     data: {
                         task,
@@ -85,19 +81,11 @@ export const test = base.extend<MyFixtures>({
             )
         );
 
-        await use();
+        await use({ inCompletedTaskTitles: titles });
     },
     taskFixture: async ({ page }, use) => {
         const dynamicTitle = `Prepare quarterly report ${Date.now()}`;
-        await use({  taskTitle: dynamicTitle });
-    },
-    pageWithCompletedTasks: async ({ page }, use) => {
-        const titles = [`Done 1 ${Date.now()}`, `Done 2 ${Date.now()}`, `Done 3 ${Date.now()}`];
-        await use({ completedTaskTitles: titles });
-    },
-    pageWithIncompletedTasks: async ({ page }, use) => {
-        const titles = [`Done 1 ${Date.now()}`, `Done 2 ${Date.now()}`, `Done 3 ${Date.now()}`];
-        await use({ incompletedTaskTitles: titles });
+        await use({ taskTitle: dynamicTitle });
     },
     goto: async ({ page }, use) => {
         await page.goto('/');
